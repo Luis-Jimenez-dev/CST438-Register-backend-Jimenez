@@ -26,6 +26,7 @@ import com.cst438.domain.StudentRepository;
 import com.cst438.domain.RegisterDTO.studentDTO;
 import com.cst438.service.GradebookService;
 
+//Controller for registering students
 @RestController
 public class RegisterController
 {
@@ -37,11 +38,15 @@ public class RegisterController
    
    @PostMapping("/register/new")
    @Transactional
+   
+   //Registers students if email is not in database
    public RegisterDTO.studentDTO addStudent(@RequestBody RegisterDTO.studentDTO studentDTO) {
       String student_email = studentDTO.email;
       
+      //Chekcs if student's email is registered
       Student check = studentRepository.findByEmail(student_email);
-
+      
+      //Registers new student
       if (check == null) {
          Student student = new Student();
          student.setEmail(student_email);
@@ -55,6 +60,8 @@ public class RegisterController
       }
    }
    
+   
+   // Was trying to add a function that returns a registered student
    /*@GetMapping("/register/findStudent")
    public RegisterDTO.studentDTO getStudent(@RequestParam("email")String email, @RequestParam("name") String name) {
       String student_email = email;
@@ -68,13 +75,16 @@ public class RegisterController
       }
    }*/
    
+   
+   //Changes Status code to a non zero number
    @PostMapping("/register/addHold")
    @Transactional
    public RegisterDTO.studentDTO addHold (@RequestBody RegisterDTO.studentDTO studentDTO){
+      //Chekcs if student is registered
       String student_email = studentDTO.email;
-      
       Student check = studentRepository.findByEmail(student_email);
       
+      //If student is register then it changes the status code
       if (check != null) {
          check.setStatusCode(1);
          check.setStatus("Hold");
@@ -85,13 +95,15 @@ public class RegisterController
       }
    }
    
+   //Removes a hold of a student by changing status code to 0
    @PostMapping("/register/removeHold")
    @Transactional
    public RegisterDTO.studentDTO removeHold (@RequestBody RegisterDTO.studentDTO studentDTO){
+      //Checks if student is registered
       String student_email = studentDTO.email;
-      
       Student check = studentRepository.findByEmail(student_email);
       
+      //If student is registered then it sets status code to 0
       if (check != null) {
          check.setStatusCode(0);
          check.setStatus("Hold");
@@ -106,6 +118,7 @@ public class RegisterController
    /*
       Helper Functions
    */
+   //Creates the students DTO
    private RegisterDTO.studentDTO createStudentDTO(Student s){
       RegisterDTO.studentDTO studentDTO = new RegisterDTO.studentDTO();
       studentDTO.id = s.getStudent_id();
@@ -122,6 +135,8 @@ public class RegisterController
       result.name = name;
       result.statusCode = statusCode;
       return result;
+      
+      //Tried making a list of students 
       /*ArrayList<RegisterDTO.studentDTO> student = new ArrayList<>();
       
       for (Student s: students) {
