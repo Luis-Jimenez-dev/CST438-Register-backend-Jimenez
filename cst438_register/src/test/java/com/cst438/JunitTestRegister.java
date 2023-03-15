@@ -38,6 +38,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.test.context.ContextConfiguration;
 
+
+//Junit tests for the registration APIs
 @ContextConfiguration(classes = { RegisterController.class })
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest
@@ -66,13 +68,14 @@ public class JunitTestRegister
    public void addStudent() throws Exception {
       MockHttpServletResponse response;
       
+      //Creates a new student
       Student student = new Student();
-      
       student.setEmail(TEST_STUDENT_EMAIL);
       student.setName(TEST_STUDENT_NAME);
       student.setStatusCode(0);
       student.setStudent_id(1);
       
+      //List keeps track of students
       List<Student> students = new java.util.ArrayList<>();
       students.add(student);
       
@@ -80,10 +83,12 @@ public class JunitTestRegister
       //given(studentRepository.findByEmail(TEST_STUDENT_EMAIL)).willReturn(student);
       given(studentRepository.save(any(Student.class))).willReturn(student);
       
+      //Creates a new DTO object
       RegisterDTO.studentDTO studentDTO = new RegisterDTO.studentDTO();
       studentDTO.email = TEST_STUDENT_EMAIL;
       studentDTO.name = TEST_STUDENT_NAME;
       
+      //Tries to add new student
       response = mvc.perform(
             MockMvcRequestBuilders
           .post("/register/new")
@@ -92,22 +97,26 @@ public class JunitTestRegister
           .accept(MediaType.APPLICATION_JSON))
             .andReturn().getResponse();
       
+      //Checks if response passed
       assertEquals(200, response.getStatus());
       
       RegisterDTO.studentDTO result = fromJsonString(response.getContentAsString(), RegisterDTO.studentDTO.class);
       assertNotEquals(0, result.id);
       
+      //Verifies that data got added
       verify(studentRepository).save(any(Student.class));
       
+      //Verifies that student information can be accessed using their email
       verify(studentRepository, times(1)).findByEmail(TEST_STUDENT_EMAIL); 
    }
    
+   //Tests API that adds a hold to a student
    @Test
    public void addHold() throws Exception {
       MockHttpServletResponse response;
       
+      //Creates new student
       Student student = new Student();
-      
       student.setEmail(TEST_STUDENT_EMAIL);
       student.setName(TEST_STUDENT_NAME);
       student.setStatusCode(1);
@@ -120,6 +129,7 @@ public class JunitTestRegister
       //given(studentRepository.findByEmail(TEST_STUDENT_EMAIL)).willReturn(student);
       given(studentRepository.save(any(Student.class))).willReturn(student);
       
+      //Creates new DTO object
       RegisterDTO.studentDTO studentDTO = new RegisterDTO.studentDTO();
       studentDTO.email = TEST_STUDENT_EMAIL;
       studentDTO.name = TEST_STUDENT_NAME;
@@ -134,20 +144,24 @@ public class JunitTestRegister
       
       assertEquals(200, response.getStatus());
       
+      //Checks the status code given
       RegisterDTO.studentDTO result = fromJsonString(response.getContentAsString(), RegisterDTO.studentDTO.class);
       assertNotEquals(0, result.statusCode);
       
+      //Verifies that data got added
       verify(studentRepository).save(any(Student.class));
       
       verify(studentRepository, times(1)).findByEmail(TEST_STUDENT_EMAIL); 
    }
    
+   
+   //Tests API that removes a hold
    @Test
    public void removeHold() throws Exception {
       MockHttpServletResponse response;
       
+      //Creates new student
       Student student = new Student();
-      
       student.setEmail(TEST_STUDENT_EMAIL);
       student.setName(TEST_STUDENT_NAME);
       student.setStatusCode(0);
@@ -174,6 +188,7 @@ public class JunitTestRegister
       
       assertEquals(200, response.getStatus());
       
+      //Ensures status code is not 0
       RegisterDTO.studentDTO result = fromJsonString(response.getContentAsString(), RegisterDTO.studentDTO.class);
       assertNotEquals(1, result.statusCode);
       
