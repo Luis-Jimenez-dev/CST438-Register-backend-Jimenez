@@ -36,7 +36,7 @@ public class RegisterController
    @Autowired
    StudentRepository studentRepository;
    
-   @PostMapping("/register/new")
+   @PostMapping("/addStudent")
    @Transactional
    
    //Registers students if email is not in database
