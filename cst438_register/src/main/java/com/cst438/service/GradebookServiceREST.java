@@ -18,6 +18,7 @@ public class GradebookServiceREST extends GradebookService {
 	}
 
 	@Override
+	//Creates a new student enrollment for the gradebook and the register service
 	public void enrollStudent(String student_email, String student_name, int course_id) {
 	   EnrollmentDTO enrollment = new EnrollmentDTO();
 	   enrollment.course_id = course_id;
