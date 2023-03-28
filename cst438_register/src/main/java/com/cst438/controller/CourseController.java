@@ -22,6 +22,7 @@ public class CourseController {
 	 */
 	@PutMapping("/course/{course_id}")
 	@Transactional
+	//Function that updates the grades of a student
 	public void updateCourseGrades( @RequestBody CourseDTOG courseDTO, @PathVariable("course_id") int course_id) {
 	   for (CourseDTOG.GradeDTO g : courseDTO.grades) {
 	            Enrollment e = enrollmentRepository.findByEmailAndCourseId(g.student_email, course_id);
