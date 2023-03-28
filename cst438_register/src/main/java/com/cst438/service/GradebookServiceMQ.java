@@ -41,6 +41,7 @@ public class GradebookServiceMQ extends GradebookService {
 	
 	@RabbitListener(queues = "registration-queue")
 	@Transactional
+	//Receives message from the service
 	public void receive(CourseDTOG courseDTOG) {
 	    System.out.println("Receive enrollment :" + courseDTOG);
 	    
