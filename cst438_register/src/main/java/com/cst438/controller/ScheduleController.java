@@ -69,7 +69,7 @@ public class ScheduleController {
 	@Transactional
 	public ScheduleDTO.CourseDTO addCourse( @RequestBody ScheduleDTO.CourseDTO courseDTO  ) { 
 
-		String student_email = "test@csumb.edu";   // student's email 
+		String student_email = "test@csumb.edu";// student's email 
 		
 		Student student = studentRepository.findByEmail(student_email);
 		Course course  = courseRepository.findById(courseDTO.course_id).orElse(null);
